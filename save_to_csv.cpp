@@ -21,7 +21,7 @@ void saveToCSV(const string &filename, const vector<vector<string>> &data) {
     outputFile.close();
 }
 int main() {
-    double altitude = 500.0; 
+    double altitude = 1000.0; 
     string result = calculate(altitude);
     vector<vector<string>> data = {{"Altitude", "Area"}, {to_string(altitude), result}};
     string filename = "output.csv";
