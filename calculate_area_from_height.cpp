@@ -1,22 +1,16 @@
+//calculate_area_from_height.cpp
 //from altitude
 // wide_x=66deg ,wide_y=41deg <- camera spec
-#include <bits/stdc++.h>
-using namespace std;
+#include "calculate_area_from_height.h"
+#include <cmath>
 
-double deg(double degree){
-     double PI = 3.14159265359;
-    return degree*(PI/180.0);
+double deg(double degree) {
+    const double PI = 3.14159265359;
+    return degree * (PI / 180.0);
 }
 
-string calculate(double altitude){
-    double real_height = altitude*tan(deg(41))*2;
-    double real_width = altitude*tan(deg(66))*2;
-    string ans = to_string(real_height*real_width/1000000); //convert to km in string
-    return ans;
-}
-main(){
-    cin.sync_with_stdio(0);cin.tie(0); //just optimize
-    double altitude;cin>>altitude; // m
-    cout << calculate(altitude) << " km^2";
-    return 0;
+std::string calculate(double altitude) {
+    double real_height = altitude * tan(deg(41)) * 2;
+    double real_width = altitude * tan(deg(66)) * 2;
+    return std::to_string(real_height * real_width / 1000000); // Convert to km in string
 }
