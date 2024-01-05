@@ -1,0 +1,28 @@
+###################################################################
+#████████╗██╗  ██╗███████╗ ██████╗ ███████╗      ██████╗  █████╗ 
+#╚══██╔══╝██║  ██║██╔════╝██╔═══██╗██╔════╝      ╚════██╗██╔══██╗
+#   ██║   ███████║█████╗  ██║   ██║███████╗█████╗ █████╔╝███████║
+#   ██║   ██╔══██║██╔══╝  ██║   ██║╚════██║╚════╝██╔═══╝ ██╔══██║
+#   ██║   ██║  ██║███████╗╚██████╔╝███████║      ███████╗██║  ██║
+#   ╚═╝   ╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚══════╝      ╚══════╝╚═╝  ╚═╝
+###################################################################
+
+[module]
+# module that schoolsat system shall run
+enable_RF          = 1
+enable_FSW         = 1
+enable_IMU         = 1
+enable_GPS         = 1
+enable_POWER       = 1
+enable_CAM         = 1
+
+# Secondary payload, designate to enable once at a time
+enable_DHT         = 1
+enable_BMT         = 1
+enable_MTM         = 1
+
+[system]
+log_level          = 0  # 0 = Debug, 1 = Info, 2 = Warning, 3 = Error
+os_version         = 100
+record_interval    = 5
+broadcast_interval = 0
