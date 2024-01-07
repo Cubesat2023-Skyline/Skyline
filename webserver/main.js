@@ -1,5 +1,5 @@
 import BME_module from './BME.js'; 
-import GPS_module from './GPS.js;'
+import GPS_module from './GPS.js';
 const bme = new BME_module();
 const gps = new GPS_module();
 
@@ -24,12 +24,14 @@ function connectWebSocket(url) {
 
     // Handle connection opened
     socket.addEventListener("open", () => {
+        document.getElementById("status").style.color = "green";
         statusDiv.textContent = "Status: Connected";
     });
 
     // Handle messages from the server
     socket.addEventListener("message", (event) => {
         const messagesDiv = document.getElementById("messages");
+        messagesDiv.style.transition = "all .2s";
         messagesDiv.innerHTML += `<p>${event.data}</p>`;
         const match = event.data.match(/\((\d+)\)/);
         if (match){
@@ -43,6 +45,7 @@ function connectWebSocket(url) {
     // Handle WebSocket close event
     socket.addEventListener("close", () => {
         statusDiv.textContent = "Status: Not Connected";
+        document.getElementById("status").style.color = "red";
         const messagesDiv = document.getElementById("messages");
         messagesDiv.innerHTML += "<p>Connection closed</p>";
     });
