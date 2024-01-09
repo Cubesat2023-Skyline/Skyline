@@ -67,6 +67,13 @@ const get_value_from_gps = document.getElementById("get_value_from_gps");
 get_value_from_bme.addEventListener("click",()=>{
     if (bme_state){
         socket.send("tm;3063;3");
+        const match = socket.event.data.match(/\((\d+)\)/);
+        if (match){
+            const new_data = parseFloat(match[0].replace("(","").replace(")","")).toFixed(4); //convert raw data to engineering data
+            console.log("pressure in hpa: ",new_data);
+            console.log("altitude: ",bme.calculate_altitude(new_data),"m");
+            console.log("Area: ",bme.calculate_area(new_data)," km^2");
+            }
     }
     else{
         alert("bme280 not working");
@@ -114,15 +121,17 @@ function connectWebSocket(url) {
     socket.addEventListener("message", (event) => {
         const messagesDiv = document.getElementById("messages");
         messagesDiv.style.transition = "all .2s";
+
         messagesDiv.innerHTML += `<p>${event.data}</p>`;
         const match = event.data.match(/\((\d+)\)/);
-        if (match){
-            const new_data = parseFloat(match[0].replace("(","").replace(")","")).toFixed(4); //convert raw data to engineering data
-            console.log("pressure in hpa: ",new_data);
-            console.log("altitude: ",bme.calculate_altitude(new_data),"m");
-            console.log("Area: ",bme.calculate_area(new_data)," km^2");
+        // if (match){
+        //     const new_data = parseFloat(match[0].replace("(","").replace(")","")).toFixed(4); //converbt raw data to engineering data
+        //     console.log("pressure in hpa: ",new_data);
+        //     console.log("altitude: ",bme.calculate_altitude(new_data),"m");
+        //     console.log("Area: ",bme.calculate_area(new_data)," km^2");
             
-        }
+        // }
+
     });
     // Handle WebSocket close event
     socket.addEventListener("close", () => {
