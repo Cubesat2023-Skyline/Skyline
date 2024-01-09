@@ -6,7 +6,7 @@ class GPS{
         return degree * (this.PI / 180.0);
     }
     convert_raw2engineering_data(raw){
-        return (raw*0.01) -1000000;
+        return (raw-1000000) *0.01;
     }
     calculate_area(altitude) {
         altitude = this.convert_raw2engineering_data(altitude);
