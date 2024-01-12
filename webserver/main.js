@@ -2,15 +2,17 @@ import BME_module from './BME.js';
 import GPS_module from './GPS.js';
 import { Handle_module_switch} from './Module_switch.js';
 import { server_status } from './Server_status.js';
-import {BME_log,GPS_log} from './Handle_log.js';
+// import {BME_log,GPS_log} from './Handle_log.js';
+import {BME_log} from './Handle_log.js';
+
 const bme = new BME_module();
 const gps = new GPS_module();
 const bme_log = new BME_log(bme);
-const gps_log = new GPS_log(gps);
+// const gps_log = new GPS_log(gps);
 let socket;
 let bme_state;
 let gps_state;
-connectWebSocket("ws://192.168.1.47:3001"); // auto connect kub
+connectWebSocket("ws://192.168.1.33:3001"); // auto connect kub
 
 function connectWebSocket(url) {
     socket = new WebSocket(url);
@@ -23,13 +25,13 @@ function connectWebSocket(url) {
         if (match){
             const new_data = parseFloat(match[0].replace("(","").replace(")","")).toFixed(4); //converbt raw data to engineering data
             if (event.data.substring(0,8)=="TM;3063;"){ //bme detection
-            bme_log.handleLogs(match); // Call the function from Handle_log.js
-            const new_data2 = bme.convert_raw2engineering_data(new_data);
-            console.log("altitude: ",bme.calculate_altitude(new_data2),"m");
-            console.log("Area: ",bme.calculate_area(new_data2)," km^2");
+            bme_log.handleLogs(new_data); // Call the function from Handle_log.js
+            // const new_data2 = bme.convert_raw2engineering_data(new_data);
+            // console.log("altitude: ",bme.calculate_altitude(new_data2),"m");
+            // console.log("Area: ",bme.calculate_area(new_data2)," km^2");
             }
             else if (event.data.substring(0,8)=="TM;3022;"){//gps detection
-                // gps_log.handleLogs(match); // Call the function from Handle_log.js
+                gps_log.handleLogs(match); // Call the function from Handle_log.js
                 console.log("altitude: ",gps.convert_raw2engineering_data(new_data),"m");
                 console.log("Area: ",gps.calculate_area(new_data)," km^2");
             }
