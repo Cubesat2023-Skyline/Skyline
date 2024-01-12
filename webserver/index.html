@@ -7,11 +7,11 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
-    <title>Simple WebSocket Client</title>
+    <title>Sub Mission ground station</title>
 </head>
 <body>
     <div class="container" style="border: 1px solid;border-radius:10px;padding:50px;width:60vmin; transition: all .2s;">
-        <h1>WebSocket Client</h1>
+        <h2>Sub Mission GS</h2>
     
         <label for="serverUrl">Server URL:</label>
         <div style="display: flex;">
@@ -44,14 +44,13 @@
             <div class="">
                 <button type="submit" class="btn btn-danger" id="get_value_from_gps">use gps</button>
                 <button type="submit" class="btn btn-secondary" id="gps_log" >log</button>
-
-
             </div>
         </div>
 
-
+        <center>
+            <button class="btn btn-dark" onclick="document.getElementById('messages').innerHTML = ' ' ">clear</button>
+        </center>
     </div>
-
 
     <div id="messages" style="padding: 20px;border:1px solid gray;width:60vmin;margin:2px auto;border-radius:10px; transition: all .2s;"></div>
 
