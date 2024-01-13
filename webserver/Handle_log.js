@@ -1,48 +1,3 @@
-// Handle_log.js
-class BME_log {
-  constructor(bme) {
-    this.bme = bme;
-    this.data = null;
-    this.csvData = "Altitude(m),Area(km^2)\n";
-    this.i = 0;
-  }
-
-  handleLogs(new_data) {
-    this.data = new_data;
-    const getValueFromBMEButton = document.getElementById('get_value_from_bme');
-    const bmeLogButton = document.getElementById('bme_log');
-
-    getValueFromBMEButton.addEventListener('click', () => {
-      this.data = this.get_value_from_bme(this.data);
-      console.log(this.i++,this.data);
-      this.csvData += `${Object.values(this.data).join(',')}\n`;
-    });
-
-    bmeLogButton.addEventListener('click', () => {
-      this.downloadCSV();
-    });
-  }
-
-  get_value_from_bme(data) {
-    const new_data2 = this.bme.convert_raw2engineering_data(data);
-    return {
-      Altitude: this.bme.calculate_altitude(new_data2),
-      Area: this.bme.calculate_area(new_data2)
-    };
-  }
-
-  downloadCSV() {
-    const blob = new Blob([this.csvData], { type: 'text/csv' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    const timestamp = new Date().toISOString().replace(/:/g, '-');
-    a.download = `bme_data_${timestamp}.csv`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  }
-}
-
 
 
 
@@ -105,4 +60,4 @@ class BME_log {
 //   }
 // }
 
-export { BME_log };
+export default  BME_log;

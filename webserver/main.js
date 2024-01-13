@@ -3,35 +3,75 @@ import GPS_module from './GPS.js';
 import { Handle_module_switch} from './Module_switch.js';
 import { server_status } from './Server_status.js';
 // import {BME_log,GPS_log} from './Handle_log.js';
-import {BME_log} from './Handle_log.js';
-
 const bme = new BME_module();
 const gps = new GPS_module();
-const bme_log = new BME_log(bme);
-// const gps_log = new GPS_log(gps);
 let socket;
 let bme_state;
 let gps_state;
+let i = 0;
+let data;
+function createBMELogHandler(bme) {
+    let csvData = "Altitude(m),Area(km^2)\n";
+    let data = null;
+
+    function addValue() {
+        const new_data2 = bme.convert_raw2engineering_data(data);
+        console.log(data);
+        const values = {
+            Altitude: bme.calculate_altitude(new_data2),
+            Area: bme.calculate_area(new_data2)
+        };
+        csvData += `${Object.values(values).join(',')}\n`;
+        console.log(i++);
+    }
+  
+    function downloadCSV() {
+      const blob = new Blob([csvData], { type: 'text/csv' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      const timestamp = new Date().toISOString().replace(/:/g, '-');
+      a.download = `bme_data_${timestamp}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+  
+      return {
+        addValue,
+        downloadCSV
+    };
+}
+
+const bmeLogHandler = createBMELogHandler(bme);
+
+// Event listeners can now be set up outside the function
+const bmeLogButton = document.getElementById('bme_log');
+
+bmeLogButton.addEventListener('click', () => {
+    bmeLogHandler.downloadCSV();
+});
+
 connectWebSocket("ws://192.168.1.33:3001"); // auto connect kub
 
 function connectWebSocket(url) {
     socket = new WebSocket(url);
     server_status(socket);
     // Handle messages from the server
-  socket.addEventListener("message", (event) => {
+    socket.addEventListener("message", (event) => {
         const messagesDiv = document.getElementById("messages");
         messagesDiv.innerHTML += `<p>${event.data}</p>`;
         let match = event.data.match(/\((\d+)\)/);
         if (match){
             const new_data = parseFloat(match[0].replace("(","").replace(")","")).toFixed(4); //converbt raw data to engineering data
+            data = new_data;
             if (event.data.substring(0,8)=="TM;3063;"){ //bme detection
-            bme_log.handleLogs(new_data); // Call the function from Handle_log.js
-            // const new_data2 = bme.convert_raw2engineering_data(new_data);
-            // console.log("altitude: ",bme.calculate_altitude(new_data2),"m");
-            // console.log("Area: ",bme.calculate_area(new_data2)," km^2");
+                bmeLogHandler.addValue();
+
+              
+                
             }
             else if (event.data.substring(0,8)=="TM;3022;"){//gps detection
-                gps_log.handleLogs(match); // Call the function from Handle_log.js
+                GPS_log.handleLogs(match); // Call the function from Handle_log.js
                 console.log("altitude: ",gps.convert_raw2engineering_data(new_data),"m");
                 console.log("Area: ",gps.calculate_area(new_data)," km^2");
             }
