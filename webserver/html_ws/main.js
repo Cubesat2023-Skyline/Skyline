@@ -63,17 +63,24 @@ document.getElementById("messageForm").addEventListener("submit", (event) => {
 Handle_module_switch(socket,  (newState) => {bme_state = newState;},  (newState) => {gps_state = newState;});
 const get_value_from_bme = document.getElementById("get_value_from_bme");
 const get_value_from_gps = document.getElementById("get_value_from_gps");
+
 get_value_from_bme.addEventListener("click",()=>{
     if (bme_state){
         socket.send("tm;3063;3");
+
     }
-    else{alert("bme280 not working");}
+    else{
+        alert("bme280 not working");
+    }
 })
+
 get_value_from_gps.addEventListener("click",()=>{
     if (gps_state){
         socket.send("tm;3022;5");
     }
-    else{alert("gps not working");}
+    else{
+        alert("gps not working");
+    }
 })
 document.getElementById("connectButton").addEventListener("click", () => {
    const serverUrl = document.getElementById("serverUrl").value;
